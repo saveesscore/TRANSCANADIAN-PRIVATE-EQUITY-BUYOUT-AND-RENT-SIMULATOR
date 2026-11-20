@@ -44,26 +44,28 @@ This repository models two core questions across a standardized **60-unit multi-
 ### A. Institutional Leveraged Buyout (LBO) Engine (`lbo_engine.py`)
 
 * **Net Operating Income (NOI) & Exit Valuation:**
+  ```text
+  NOI(t)        = (Units × Avg_Rent(t) × 12) × (1 − Expense_Ratio)
+  Exit_Value(5) = NOI(5) ÷ (Entry_Cap_Rate + 0.0025)
+  ```
 
-\[\text{NOI}_t = (\text{Units} \times \overline{\text{Rent}}_t \times 12) \times (1 - \text{Expense Ratio})\]
+* **Cohort Rent Blending:** Each year `t ∈ {1, 2, 3, 4, 5}`, units are partitioned into retained tenancies `(1 − τ)` and vacated units `(τ)`:
+  ```text
+  Avg_Rent(t) = (1 − τ) × Avg_Rent(t−1) × (1 + min(Rent_Cap, Market_Growth)) + τ × Turnover_Rent
+  ```
+  where `Turnover_Rent = Market_Rent(t)` if `Vacancy_Decontrol == True`, and `Avg_Rent(t−1) × (1 + Rent_Cap)` under strict unit-tied rent control.
 
-\[\text{Exit Value}_5 = \frac{\text{NOI}_5}{\text{Cap Rate}_{\text{entry}} + 0.0025}\]
-
-* **Cohort Rent Blending:** Each year \(t \in \{1, 2, 3, 4, 5\}\), units are partitioned into retained tenancies \((1 - \tau)\) and vacated units \((\tau)\):
-
-\[\overline{\text{Rent}}_t = (1 - \tau)\cdot \overline{\text{Rent}}_{t-1}\left(1 + \min(g_{\text{cap}}, g_{\text{mkt}})\right) + \tau \cdot \text{Rent}_{\text{turnover}}\]
-
-where \(\text{Rent}_{\text{turnover}} = \text{Rent}_{\text{mkt}, t}\) if `Vacancy_Decontrol == True`, and \(\overline{\text{Rent}}_{t-1}(1 + g_{\text{cap}})\) under strict unit-tied rent control.
-
-* **Internal Rate of Return (IRR):** Solved numerically via polynomial root-finding (`numpy.roots`) across the 5-year levered cash-flow vector \(CF_0 \dots CF_5\):
-
-\[\sum_{t=0}^{5} \frac{CF_t}{(1 + \text{IRR})^t} = 0\]
+* **Internal Rate of Return (IRR):** Solved numerically via polynomial root-finding (`numpy.roots`) across the 5-year levered cash-flow vector `CF(0) ... CF(5)`:
+  ```text
+  ∑ [ CF(t) ÷ (1 + IRR)^t ] = 0    (for t = 0 to 5)
+  ```
 
 ### B. Household Buy vs. Rent + Invest Engine (`buy_vs_rent.py`)
 
-* **Fixed-Rate Mortgage Amortization:** Models a 25-year amortization schedule (\(n = 300\) months) with a 20% down payment:
-
-\[M = P \cdot \frac{i(1 + i)^{300}}{(1 + i)^{300} - 1}\]
+* **Fixed-Rate Mortgage Amortization:** Models a 25-year amortization schedule (`n = 300` months) with a 20% down payment:
+  ```text
+  M = P × [ i × (1 + i)^300 ] ÷ [ (1 + i)^300 − 1 ]
+  ```
 
 * **Net Worth Comparison:** Tracks cumulative home equity net of remaining principal and 5% transaction/selling costs against an equivalent renter portfolio compounding the initial down payment and monthly cash-flow savings at a 7.5% annualized equity return.
 
