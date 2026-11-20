@@ -2,7 +2,7 @@
 
 An institutional quantitative finance and housing-policy simulator evaluating how **provincial landlord-tenant statutes**, **vacancy decontrol loopholes**, and **interest-rate regimes** govern private equity leveraged buyout (LBO) returns and household buy-vs.-rent wealth across six major Canadian markets: **Toronto, Vancouver, Montreal, Halifax, Calgary, and Edmonton**.
 
-> **Live Interactive Dashboard:** [`https://<your-username>.github.io/<your-repo-name>/`](https://<your-username>.github.io/<your-repo-name>/) *(Update with your GitHub Pages URL once deployed)*
+> **Live Interactive Dashboard:** `https://<your-username>.github.io/<your-repo-name>/` *(Update with your GitHub Pages URL once deployed)*
 
 ---
 
@@ -42,17 +42,29 @@ This repository models two core questions across a standardized **60-unit multi-
 ## 4. Mathematical Methodology
 
 ### A. Institutional Leveraged Buyout (LBO) Engine (`lbo_engine.py`)
-* **Net Operating Income (NOI) & Valuation:**
-  \[\text{NOI}_t = (\text{Units} \times \overline{\text{Rent}}_t \times 12) \times (1 - \text{Expense Ratio}), \qquad \text{Exit Value}_5 = \frac{\text{NOI}_5}{\text{Cap Rate}_{\text{entry}} + 0.25\%}\]
-* **Cohort Rent Blending:** Each year \(t \in \{1..5\}\), units are partitioned into retained tenancies \((1 - \tau)\) and vacated units \((\tau)\):
-  \[\overline{\text{Rent}}_t = (1 - \tau)\cdot \overline{\text{Rent}}_{t-1}\left(1 + \min(g_{\text{cap}}, g_{\text{mkt}})\right) + \tau \cdot \text{Rent}_{\text{turnover}}\]
-  where \(\text{Rent}_{\text{turnover}} = \text{Rent}_{\text{mkt}, t}\) if `Vacancy_Decontrol == True`, and \(\overline{\text{Rent}}_{t-1}(1 + g_{\text{cap}})\) under strict unit-tied rent control.
+
+* **Net Operating Income (NOI) & Exit Valuation:**
+
+\[\text{NOI}_t = (\text{Units} \times \overline{\text{Rent}}_t \times 12) \times (1 - \text{Expense Ratio})\]
+
+\[\text{Exit Value}_5 = \frac{\text{NOI}_5}{\text{Cap Rate}_{\text{entry}} + 0.0025}\]
+
+* **Cohort Rent Blending:** Each year \(t \in \{1, 2, 3, 4, 5\}\), units are partitioned into retained tenancies \((1 - \tau)\) and vacated units \((\tau)\):
+
+\[\overline{\text{Rent}}_t = (1 - \tau)\cdot \overline{\text{Rent}}_{t-1}\left(1 + \min(g_{\text{cap}}, g_{\text{mkt}})\right) + \tau \cdot \text{Rent}_{\text{turnover}}\]
+
+where \(\text{Rent}_{\text{turnover}} = \text{Rent}_{\text{mkt}, t}\) if `Vacancy_Decontrol == True`, and \(\overline{\text{Rent}}_{t-1}(1 + g_{\text{cap}})\) under strict unit-tied rent control.
+
 * **Internal Rate of Return (IRR):** Solved numerically via polynomial root-finding (`numpy.roots`) across the 5-year levered cash-flow vector \(CF_0 \dots CF_5\):
-  \[\sum_{t=0}^{5} \frac{CF_t}{(1 + \text{IRR})^t} = 0\]
+
+\[\sum_{t=0}^{5} \frac{CF_t}{(1 + \text{IRR})^t} = 0\]
 
 ### B. Household Buy vs. Rent + Invest Engine (`buy_vs_rent.py`)
-* **Fixed-Rate Mortgage Amortization:** Models a 25-year amortization schedule with a 20% down payment:
-  \[M = P \cdot \frac{i(1 + i)^{300}}{(1 + i)^{300} - 1}\]
+
+* **Fixed-Rate Mortgage Amortization:** Models a 25-year amortization schedule (\(n = 300\) months) with a 20% down payment:
+
+\[M = P \cdot \frac{i(1 + i)^{300}}{(1 + i)^{300} - 1}\]
+
 * **Net Worth Comparison:** Tracks cumulative home equity net of remaining principal and 5% transaction/selling costs against an equivalent renter portfolio compounding the initial down payment and monthly cash-flow savings at a 7.5% annualized equity return.
 
 ---
