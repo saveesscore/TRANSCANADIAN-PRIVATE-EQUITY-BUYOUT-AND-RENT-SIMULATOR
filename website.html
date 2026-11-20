@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rent Desk: Rent Control vs. the Market</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{--bg:#000;--panel:#0b0b0b;--line:#242424;--tx:#f2f2f2;--mut:#8f8f8f;--red:#ff3b3b;--grn:#19c37d;--amb:#f5b301;color-scheme:dark;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 "JetBrains Mono",ui-monospace,Menlo,monospace}
+header{position:sticky;top:0;z-index:20;background:#000;border-bottom:1px solid var(--line);padding:10px 20px;padding-top:calc(10px + env(safe-area-inset-top,0px));display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.brand{font:800 1.6rem/1 "Barlow Condensed",Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:10px}
+.brand:before{content:"";width:12px;height:12px;background:var(--red)}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+.nl{background:none;border:0;border-bottom:2px solid transparent;color:var(--mut);font:inherit;font-size:13px;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;cursor:pointer}
+.nl.on{color:#fff;border-color:var(--red)}
+.nl:hover{color:#fff}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.lt{display:inline-block;transition:transform .2s cubic-bezier(.175,.885,.32,1.275),color .2s}
+.lt:hover{transform:translateY(-3px) scale(1.15);color:var(--red)}
+.tick{overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut)}
+.tick div{display:inline-block;padding:7px 0;animation:mq 45s linear infinite}
+.tick span{margin-right:36px}.tick b{color:#fff}.up{color:var(--grn)}.dn{color:var(--red)}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tick div{animation:none}#v{transition:none!important}}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 56px}
+#v{transition:transform .25s ease,opacity .25s}
+h1{font:800 clamp(3rem,10vw,7rem)/.92 "Barlow Condensed",Impact,sans-serif;text-transform:uppercase;margin:8px 0 18px;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--red)}
+h2{font:800 1.55rem/1.1 "Barlow Condensed",Impact,sans-serif;text-transform:uppercase;letter-spacing:.03em;margin:0}
+h3{font:600 1rem "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin:0 0 10px}
+.kick{color:var(--red);font-size:13px;text-transform:uppercase;letter-spacing:.1em;margin:0}
+.lede{max-width:62ch;color:#cfcfcf}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:26px 0}
+.kpi{border:1px solid var(--line);background:var(--panel);padding:16px}
+.kpi b{display:block;font:800 3.2rem/1 "Barlow Condensed",sans-serif;color:var(--red)}
+.kpi span{color:var(--mut);font-size:13px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{background:var(--red);color:#000;border:0;font:700 14px "JetBrains Mono",monospace;text-transform:uppercase;padding:12px 18px;cursor:pointer}
+.btn.o{background:none;color:#fff;border:1px solid #fff}
+.btn:hover{filter:brightness(1.15)}
+.grid{display:grid;grid-template-columns:290px 1fr;gap:24px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.side{position:sticky;top:96px;border:1px solid var(--line);background:var(--panel);padding:16px}
+@media (max-width:860px){.side{position:static}}
+.pre{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.pre button{background:none;color:#fff;border:1px solid #444;font:inherit;font-size:11px;padding:7px 4px;cursor:pointer;text-transform:uppercase}
+.pre button:hover{border-color:var(--red);color:var(--red)}
+.side label{display:block;font-size:12px;color:var(--mut);margin-bottom:12px}
+.side label b{float:right;color:#fff}
+.side input[type=range]{width:100%;accent-color:var(--red)}
+.chk{color:#ddd!important}
+select{background:#000;color:#fff;border:1px solid #555;font:inherit;padding:5px 8px}
+.card{border:1px solid var(--line);background:var(--panel);padding:18px;margin-bottom:18px}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tk{border-left:3px solid var(--red);padding-left:10px;margin:10px 0 14px;font-size:13px;color:#ddd}
+.cap{font-size:12px;color:var(--mut);margin:6px 0 0}
+svg text{fill:#9a9a9a;font:11px "JetBrains Mono",monospace}
+svg .lb{fill:#e6e6e6;font-size:12px}svg .vl{fill:#fff;font-weight:700}
+.x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mut);font-weight:400}
+th:first-child,td:first-child{text-align:left;color:#fff}
+.hm td{border:2px solid #000}
+dl{margin:0}dt{color:#fff;font-weight:700;margin-top:14px}dd{margin:2px 0 0;color:#bbb;max-width:70ch}
+.note{color:var(--mut);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<header><div class="brand" id="brand"></div><nav id="nav"></nav></header>
+<div class="tick" id="tick"></div>
+<main><div id="v"></div><p class="note">City figures are illustrative baselines and the models are simplified projections. This is not investment advice.</p></main>
+<script>
+const $=id=>document.getElementById(id);
+const C=[
+{n:"Toronto",u:60,p:420000,occ:1950,mkt:2650,cap:.021,dec:true,ex:.38},
+{n:"Vancouver",u:60,p:460000,occ:2100,mkt:2950,cap:.023,dec:true,ex:.36},
+{n:"Montreal",u:60,p:260000,occ:1450,mkt:1950,cap:.031,dec:false,ex:.42},
+{n:"Halifax",u:60,p:275000,occ:1650,mkt:2200,cap:.05,dec:true,ex:.40},
+{n:"Calgary",u:60,p:285000,occ:1750,mkt:1900,cap:1.0,dec:true,ex:.39},
+{n:"Edmonton",u:60,p:215000,occ:1400,mkt:1525,cap:1.0,dec:true,ex:.43}];
+C.forEach(c=>{c.pp=c.u*c.p;c.noi=c.occ*12*c.u*(1-c.ex);c.cr=c.noi/c.pp*100;c.gap=(c.mkt-c.occ)/c.occ*100});
+const RED="#ff3b3b",GRN="#19c37d",AMB="#f5b301";
+function irr(cf){const f=r=>cf.reduce((s,v,t)=>s+v/Math.pow(1+r,t),0);let lo=-.9,hi=3;if(f(lo)*f(hi)>0)return NaN;for(let i=0;i<100;i++){const m=(lo+hi)/2;f(lo)*f(m)<=0?hi=m:lo=m}return(lo+hi)/2}
+function lbo(c,p){const loan=c.pp*p.ltv,int=loan*p.rate,cap=p.force&&c.cap>=1?.03:c.cap;let avg=c.occ,mk=c.mkt;const dec=p.force?false:c.dec,cf=[-(c.pp-loan)];
+for(let y=1;y<=5;y++){mk*=1+p.g;const t=c.u*p.turn,s=c.u-t,sr=avg*(1+Math.min(cap,p.g)),tr=dec?mk:avg*(1+cap);
+avg=(s*sr+t*tr)/c.u;const noi=c.u*avg*12*(1-c.ex);let n=noi-int-t*p.reno;if(y==5)n+=noi/(c.noi/c.pp+.0025)-loan;cf.push(n)}
+return{irr:irr(cf)*100,hike:(avg-c.occ)/c.occ*100,end:avg}}
+function bvr(c,p){const dp=c.p*p.down,loan=c.p-dp,mr=p.rate/12,n=300,pay=mr>0?loan*(mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1):loan/n;
+let bal=loan,hv=c.p,rent=c.mkt,st=dp;const cap=Math.min(c.cap,.035),ser=[[dp-c.p*.05,dp]];
+for(let y=0;y<p.yrs;y++){for(let m=0;m<12;m++){bal=Math.max(0,bal-(pay-bal*mr));st=(st+pay+hv*.02/12+450-rent)*(1+p.stock/12)}hv*=1+p.app;rent*=1+cap;ser.push([hv-bal-hv*.05,st])}
+const buyer=hv-bal-hv*.05;return{buyer,renter:st,diff:buyer-st,ser}}
+
+const pct=v=>+(v*100).toFixed(2)+"%",usd=v=>"$"+Math.round(v).toLocaleString("en-CA"),
+fk=v=>(v<0?"−":"")+"$"+Math.abs(Math.round(v/1000))+"k",fp=v=>v.toFixed(0)+"%";
+const DEF={
+lbo:[["turn","Tenant turnover per year",0,.5,.01,.10,pct],["reno","Renovation per turned unit",0,50000,1000,0,usd],["ltv","Loan-to-value",.4,.8,.01,.7,pct],["rate","Mortgage interest rate",.02,.08,.0025,.05,pct],["g","Market rent growth",0,.06,.005,.03,pct]],
+bvr:[["yrs","Years held",1,30,1,10,v=>v+" yrs"],["rate","Mortgage interest rate",.02,.08,.0025,.045,pct],["down","Down payment",.05,.5,.01,.2,pct],["app","Home price growth",0,.06,.005,.03,pct],["stock","Stock market return",0,.12,.005,.075,pct]]};
+const PRE={lbo:{"Passive hold":{},"Value-add":{turn:.3,reno:20000},"Rent-control ban":{turn:.3,reno:20000,force:true},"Rates +2 pts":{turn:.3,reno:20000,rate:.07}},
+bvr:{"Base case":{},"Housing boom":{app:.06},"Stocks slump":{stock:.03},"Rates +2 pts":{rate:.065}}};
+const S={lbo:{force:false},bvr:{}},B={};for(const k in DEF)DEF[k].forEach(d=>S[k][d[0]]=d[5]);for(const k in S)B[k]={...S[k]};
+let selCity=0,cur="home";
+
+function hbar(it,o){const W=640,L=84,rh=38,bh=22,H=it.length*rh+30;
+const vs=it.flatMap(i=>[i.v,i.m]).filter(Number.isFinite).concat(o.thr!=null?[o.thr]:[],0);
+let lo=Math.min(...vs),hi=Math.max(...vs);const pd=(hi-lo)*.14||1;if(lo<0)lo-=pd;hi+=pd;
+const X=v=>L+(v-lo)*(W-L-8)/(hi-lo),h=bh/2;let s="";
+for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4;s+=`<line x1="${X(v)}" x2="${X(v)}" y1="0" y2="${H-26}" stroke="#1d1d1d"/><text x="${X(v)}" y="${H-10}" text-anchor="middle">${o.f(v)}</text>`}
+s+=`<line x1="${X(0)}" x2="${X(0)}" y1="0" y2="${H-26}" stroke="#666"/>`;
+if(o.thr!=null)s+=`<line x1="${X(o.thr)}" x2="${X(o.thr)}" y1="0" y2="${H-26}" stroke="#fff" stroke-width="2" stroke-dasharray="5 4"/>`;
+it.forEach((r,i)=>{const y=i*rh+8;s+=`<text x="${L-8}" y="${y+h+4}" text-anchor="end" class="lb">${r.n}</text>`;
+if(Number.isFinite(r.v)){const a=X(Math.min(0,r.v)),b=X(Math.max(0,r.v));s+=`<rect x="${a}" y="${y}" width="${Math.max(2,b-a)}" height="${bh}" fill="${r.c}"/><text x="${r.v>=0?b+6:a-6}" y="${y+h+4}" text-anchor="${r.v>=0?"start":"end"}" class="vl">${o.f(r.v)}</text>`}
+else s+=`<text x="${X(0)+6}" y="${y+h+4}" class="vl">n/a</text>`;
+if(Number.isFinite(r.m))s+=`<path d="M${X(r.m)} ${y-2}l7 ${h+2}l-7 ${h+2}l-7 -${h+2}z" fill="#fff" stroke="#000"/>`});
+return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img">${s}</svg>`}
+
+function lines(xs,ser,f){const W=640,H=300,L=64,R=96,T=12,B=30,all=ser.flatMap(s=>s.v);
+let lo=Math.min(...all,0),hi=Math.max(...all);hi+=(hi-lo)*.06;
+const X=i=>L+i*(W-L-R)/(xs.length-1),Y=v=>T+(hi-v)*(H-T-B)/(hi-lo);let s="";
+for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4;s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1d1d1d"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end">${f(v)}</text>`}
+xs.forEach((x,i)=>{if(i%Math.ceil(xs.length/8)==0)s+=`<text x="${X(i)}" y="${H-10}" text-anchor="middle">${x}</text>`});
+ser.forEach(r=>{s+=`<polyline fill="none" stroke="${r.c}" stroke-width="3" points="${r.v.map((v,i)=>X(i)+","+Y(v)).join(" ")}"/><text x="${W-R+6}" y="${Y(r.v.at(-1))+4}" class="vl" style="fill:${r.c}">${r.n}</text>`});
+return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img">${s}</svg>`}
+
+function hm(cols,get,o){return`<table class="hm"><tr><th></th>${cols.map(c=>`<th>${o.ch(c)}</th>`).join("")}</tr>${C.map(r=>`<tr><td>${r.n}</td>${cols.map(c=>{const v=get(r,c);if(!Number.isFinite(v))return"<td>n/a</td>";const g=v>=o.thr,a=.12+.5*Math.min(1,Math.abs(v-o.thr)/o.sc);
+return`<td style="background:${g?`rgba(25,195,125,${a})`:`rgba(255,59,59,${a})`}">${g?"▲ ":"▼ "}${o.f(v)}</td>`}).join("")}</tr>`).join("")}</table>`}
+
+const table=(h,rows)=>"<table><tr>"+h.map(x=>`<th>${x}</th>`).join("")+"</tr>"+rows.map(r=>"<tr>"+r.map(x=>`<td>${x}</td>`).join("")+"</tr>").join("")+"</table>";
+const T=(t,k)=>{$("h"+k).textContent=t};
+const tk=(k,t)=>{$("t"+k).textContent=t};
+function upd(k){const p=S[k];
+if(k=="lbo"){const R=C.map(c=>({c,...lbo(c,p),ban:lbo(c,{...p,force:true}).irr})),ok=R.filter(r=>r.irr>=15).length,
+so=[...R].sort((a,b)=>(isNaN(b.irr)?-99:b.irr)-(isNaN(a.irr)?-99:a.irr));
+T("Who clears the 15% target?",1);tk(1,`${ok} of 6 cities clear 15% at these settings. Best: ${so[0].c.n} at ${so[0].irr.toFixed(1)}%.`);
+$("c1").innerHTML=hbar(so.map(r=>({n:r.c.n,v:r.irr,m:r.ban,c:r.irr>=15?GRN:RED})),{thr:15,f:fp});
+$("p1").textContent="Bars: 5-year return (IRR). Dashed line: 15% target. White diamond: return if vacancy decontrol were banned.";
+const rs=[.03,.04,.05,.06,.07],n3=r=>C.filter(c=>lbo(c,{...p,rate:r}).irr>=15).length;
+T("What if interest rates rise?",2);tk(2,`At 3% mortgage rates ${n3(.03)} cities clear the target. At 7%, ${n3(.07)} do.`);
+$("c2").innerHTML=hm(rs,(c,r)=>lbo(c,{...p,rate:r}).irr,{thr:15,sc:10,f:v=>v.toFixed(1)+"%",ch:r=>pct(r)});
+T("What does it mean for tenants?",3);const w=[...R].sort((a,b)=>b.hike-a.hike)[0];tk(3,`Tenants in ${w.c.n} face the biggest rent rise: ${w.hike.toFixed(1)}% over five years.`);
+$("c3").innerHTML=table(["City","Starting cap rate","5-year IRR","Tenant rent rise","Average rent at exit"],R.map(r=>[r.c.n,r.c.cr.toFixed(2)+"%",r.irr.toFixed(1)+"%",r.hike.toFixed(1)+"%",usd(r.end)]))}
+else{const R=C.map(c=>({c,...bvr(c,p)})),n=R.filter(r=>r.diff>0).length,so=[...R].sort((a,b)=>b.diff-a.diff);
+T(`Who ends up richer after ${p.yrs} years?`,1);tk(1,`Buying wins in ${n} of 6 cities. Biggest buyer edge: ${so[0].c.n} (${fk(so[0].diff)}). Biggest renter edge: ${so[5].c.n} (${fk(so[5].diff)}).`);
+$("c1").innerHTML=hbar(so.map(r=>({n:r.c.n,v:r.diff,c:r.diff>0?GRN:RED})),{thr:null,f:fk});
+$("p1").textContent="Bars: buyer’s net worth minus renter’s net worth. Right (▲ green) means buying wins. Left (red) means renting and investing wins.";
+const r=R[selCity],x=r.ser.findIndex((s,i)=>i>0&&s[0]>s[1]);
+T("When does buying overtake renting?",2);tk(2,`In ${r.c.n}, buying ${x>0?`pulls ahead in year ${x}.`:"never pulls ahead within this period."}`);
+$("c2").innerHTML=lines(r.ser.map((_,i)=>i),[{n:"Buy",c:"#f2f2f2",v:r.ser.map(s=>s[0])},{n:"Rent+invest",c:AMB,v:r.ser.map(s=>s[1])}],fk)+`<p class="cap">Horizontal axis: years. Net worth after selling costs (buyer) and after investing the savings (renter).</p>`;
+const rs=[.025,.035,.045,.055,.065];T("What if mortgage rates change?",3);
+const w=c=>bvr(c,{...p,rate:rs[0]}).diff>0,w2=c=>bvr(c,{...p,rate:rs[4]}).diff>0;tk(3,`At ${pct(rs[0])}, buying wins in ${C.filter(w).length} cities. At ${pct(rs[4])}, in ${C.filter(w2).length}.`);
+$("c3").innerHTML=hm(rs,(c,q)=>bvr(c,{...p,rate:q}).diff/1000,{thr:0,sc:150,f:v=>(v<0?"−":"+")+"$"+Math.abs(Math.round(v))+"k",ch:q=>pct(q)})}}
+
+function ctl(k){const el=$("ctl");
+el.innerHTML=DEF[k].map(d=>`<label>${d[1]}<b id="v-${d[0]}">${d[6](S[k][d[0]])}</b><input type="range" min="${d[2]}" max="${d[3]}" step="${d[4]}" value="${S[k][d[0]]}" data-k="${d[0]}"></label>`).join("")+(k=="lbo"?`<label class="chk"><input type="checkbox" id="force" ${S.lbo.force?"checked":""}> Ban vacancy decontrol</label>`:"");
+el.querySelectorAll("input[type=range]").forEach(i=>i.oninput=()=>{const d=DEF[k].find(x=>x[0]==i.dataset.k);S[k][d[0]]=+i.value;$("v-"+d[0]).textContent=d[6](+i.value);upd(k)});
+if(k=="lbo")$("force").onchange=e=>{S.lbo.force=e.target.checked;upd(k)}}
+
+function model(k){const bv=k=="bvr";
+$("v").innerHTML=`<p class="kick">${bv?"Home buyer vs. renter":"Private-equity apartment buyout"}</p><h1 style="font-size:clamp(2.4rem,7vw,4.5rem)">${bv?"Buy <em>vs.</em> rent":"The <em>buyout</em> model"}</h1>
+<div class="grid"><aside class="side"><h3>Scenarios</h3><div class="pre" id="pre"></div><h3>Assumptions</h3><div id="ctl"></div></aside><div>
+<div class="card"><h2 id="h1"></h2><p class="tk" id="t1"></p><div id="c1"></div><p class="cap" id="p1"></p></div>
+<div class="card"><div class="ch"><h2 id="h2"></h2>${bv?`<select id="sel" aria-label="City">${C.map((c,i)=>`<option value="${i}">${c.n}</option>`).join("")}</select>`:""}</div><p class="tk" id="t2"></p><div class="x" id="c2"></div></div>
+<div class="card"><h2 id="h3"></h2><p class="tk" id="t3"></p><div class="x" id="c3"></div></div></div></div>`;
+$("pre").innerHTML=Object.keys(PRE[k]).map(n=>`<button>${n}</button>`).join("");
+$("pre").querySelectorAll("button").forEach(b=>b.onclick=()=>{Object.assign(S[k],B[k],PRE[k][b.textContent]);ctl(k);upd(k)});
+if(bv){$("sel").value=selCity;$("sel").onchange=e=>{selCity=+e.target.value;upd(k)}}
+ctl(k);upd(k)}
+
+function render(){const v=$("v");
+if(cur=="home"){const va=C.filter(c=>lbo(c,{turn:.3,reno:20000,ltv:.7,rate:.05,g:.03,force:false}).irr>=15).length,
+bw=C.filter(c=>bvr(c,{yrs:10,rate:.045,down:.2,app:.03,stock:.075}).diff>0).length,wg=[...C].sort((a,b)=>b.gap-a.gap)[0];
+v.innerHTML=`<p class="kick">Canada · 6 cities · 2 models</p><h1>Rent control<br>vs. <em>the market.</em></h1>
+<p class="lede">Two questions, tested city by city. Can a private-equity fund still hit a 15% return buying apartment buildings, and how much do each province’s rent rules decide that? And is buying a home actually better than renting and investing the difference?</p>
+<div class="kpis"><div class="kpi"><b>${va}/6</b><span>cities clear a 15% return in the value-add buyout (30% turnover, $20k renovations)</span></div>
+<div class="kpi"><b>${bw}/6</b><span>cities where buying beats renting after 10 years at a 4.5% mortgage</span></div>
+<div class="kpi"><b>${wg.gap.toFixed(0)}%</b><span>widest rent gap: ${wg.n}, where sitting tenants pay far below market</span></div></div>
+<div class="cta"><button class="btn" data-p="lbo">Run the buyout model →</button><button class="btn o" data-p="bvr">Run buy vs. rent →</button></div>`;
+v.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>go(b.dataset.p))}
+else if(cur=="cities"){v.innerHTML=`<p class="kick">Baseline data</p><h1 style="font-size:clamp(2.4rem,7vw,4.5rem)">Six <em>cities</em></h1>
+<div class="card"><h2>Where is the rent gap widest?</h2><p class="tk">The rent gap is how much more a new tenant would pay than a sitting tenant. A buyer can only capture it where rent is allowed to reset on turnover.</p>${hbar([...C].sort((a,b)=>b.gap-a.gap).map(c=>({n:c.n,v:c.gap,c:RED})),{f:fp})}</div>
+<div class="card x">${table(["City","Price per unit","Current rent","Market rent","Rent cap","Resets on turnover","Cap rate"],C.map(c=>[c.n,usd(c.p),usd(c.occ),usd(c.mkt),c.cap>=1?"None":pct(c.cap),c.dec?"Yes":"No",c.cr.toFixed(2)+"%"]))}</div>`}
+else if(cur=="how"){v.innerHTML=`<p class="kick">Methods</p><h1 style="font-size:clamp(2.4rem,7vw,4.5rem)">How it <em>works</em></h1><div class="card"><dl>
+<dt>Buyout model</dt><dd>A fund buys a 60-unit building with borrowed money, holds it five years, then sells. Each year some tenants leave. Their units reset to market rent where the province allows it, and stay under the cap where it does not. The sale price assumes the cap rate widens slightly (0.25 points).</dd>
+<dt>Buy vs. rent</dt><dd>One household buys a home with a 25-year mortgage. The other rents and invests the down payment, plus any monthly savings versus owning, in stocks. Owner costs include property tax (1%), maintenance (1%) and $450 a month in fees. Selling costs are 5%.</dd>
+<dt>IRR (internal rate of return)</dt><dd>The yearly return on the fund’s equity, counting rent income and the sale. The target here is 15%.</dd>
+<dt>Cap rate</dt><dd>First-year net income divided by the purchase price. A rough measure of yield before debt.</dd>
+<dt>LTV (loan-to-value)</dt><dd>The share of the purchase price that is borrowed.</dd>
+<dt>Vacancy decontrol</dt><dd>A rule that lets a landlord reset rent to the market level when a tenant leaves. Banning it keeps new rents tied to the old cap.</dd>
+<dt>Known limits</dt><dd>City data is illustrative. Where there is no provincial cap (Alberta), the rent-control ban scenario assumes a 3% cap. Taxes, fees and fund costs are simplified.</dd></dl></div>`}
+else model(cur)}
+
+const PG=["home","lbo","bvr","cities","how"],NM={home:"home",lbo:"buyout",bvr:"buy vs. rent",cities:"cities",how:"how it works"};
+function L(el,t){el.innerHTML="";[...t].forEach(ch=>{const s=document.createElement("span");if(ch==" ")s.style.cssText="display:inline-block;width:.35em";else{s.className="lt";s.textContent=ch}el.appendChild(s)})}
+function nav(){document.querySelectorAll(".nl").forEach(b=>b.classList.toggle("on",b.dataset.p==cur))}
+function go(p){if(p==cur)return;const d=PG.indexOf(p)>PG.indexOf(cur)?1:-1,v=$("v");
+v.style.transform=`translateX(${-d*40}px)`;v.style.opacity=0;
+setTimeout(()=>{cur=p;nav();try{render()}catch(e){v.innerHTML=`<p class="tk">Something went wrong: ${e.message}</p>`}scrollTo(0,0);v.style.transition="none";v.style.transform=`translateX(${d*40}px)`;
+setTimeout(()=>{v.style.transition="";v.style.transform="none";v.style.opacity=1},30)},220)}
+L($("brand"),"Rent Desk");
+PG.forEach(p=>{const b=document.createElement("button");b.className="nl";b.dataset.p=p;L(b,NM[p]);b.onclick=()=>go(p);$("nav").appendChild(b)});
+const tkr=C.map(c=>`<span><b>${c.n.toUpperCase()}</b> cap ${c.cr.toFixed(1)}% <i class="${c.gap>20?"up":"dn"}">${c.gap>20?"▲":"▼"} ${c.gap.toFixed(0)}% rent gap</i></span>`).join("");
+$("tick").innerHTML=`<div>${tkr}${tkr}</div>`;
+nav();render();
+</script>
+</body>
+</html>
